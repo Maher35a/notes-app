@@ -1,15 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppbar extends StatelessWidget {
-  const CustomAppbar({super.key});
-
+  const CustomAppbar({super.key, required this.title, required this.icon});
+final String title ;
+final IconData icon;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 40, left: 12,right: 12,),
       child: Row(
         children: [
-          Text ("Notes", style: TextStyle(fontSize: 30)),
+          Text (title, style: TextStyle(fontSize: 30)),
           Spacer(),
           Container(
             padding: EdgeInsets.all(2), // مسافة داخلية حول الأيقونة
@@ -21,7 +23,7 @@ class CustomAppbar extends StatelessWidget {
               onPressed: () {
                 // نفذ شيء هنا
               },
-              icon: Icon(Icons.search, size: 25, color: Colors.white),
+              icon: Icon(icon, size: 25, color: Colors.white),
             ),
           )
         ]
