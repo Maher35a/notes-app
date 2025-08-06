@@ -1,76 +1,32 @@
 import 'package:flutter/material.dart';
-
-import 'Appbar_widget.dart';
-import 'CustomButton.dart';
-import 'Customtextfildwidget.dart';
-
-class Bottomsheet  extends StatelessWidget {
-  const Bottomsheet ({super.key});
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../cubits/addnote_cubit.dart';
+import 'addNotesheet.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+class Bottomsheet extends StatelessWidget {
+    Bottomsheet({super.key});
   @override
   Widget build(BuildContext context) {
-    return
-      Padding(
+    return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: SingleChildScrollView(
-        child: addsheet(),
-      ),
-    );
-  }
-}
-
-class addsheet extends StatefulWidget {
-  const addsheet({
-    super.key,
-  });
-
-  @override
-  State<addsheet> createState() => _addsheetState();
-}
-
-class _addsheetState extends State<addsheet> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-  String? title, subtitle;
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      autovalidateMode: autovalidateMode,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 40),
-          customtextfild(
-            onSaved: (value) {
-              title = value;
+        child: BlocConsumer<AddnoteCubit, AddnoteState>(
+          listener: (context, state) {
+            if (state is AddnoteFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errormassage),
+                  backgroundColor: Colors.red ));}
+            if (state is AddnoteSuccess) {
+              Navigator.pop(context);
+            }
             },
-            hintText: 'Title',
-          ),
-          SizedBox(height: 20),
-
-          customtextfild(
-            onSaved: (value) {
-              subtitle = value;
-            },
-            hintText: 'add note here',
-            maxLines: 5,
-          ),
-          SizedBox(height: 20),
-
-          CustomButtonwidget(
-            text: 'add',
-            onTap: () {
-              if (formKey.currentState!.validate()) {
-                formKey.currentState!.save();
-              } else {
-                autovalidateMode = AutovalidateMode.always;
-                setState(() {});
-              }
-            },
-          ),          SizedBox(height: 100),
-
-        ],
+          builder: (context, state) {
+            return  ModalProgressHUD(
+                inAsyncCall: state is AddnoteLoading ? true : false,
+                child: addsheet());
+          },
+        ),
       ),
     );
   }
