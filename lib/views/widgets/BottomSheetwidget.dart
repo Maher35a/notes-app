@@ -40,8 +40,7 @@ class _addsheetState extends State<addsheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomAppbar(title: 'Edit Note', icon: Icons.check),
-          SizedBox(height: 30),
+          SizedBox(height: 40),
           customtextfild(
             onSaved: (value) {
               title = value;
@@ -69,7 +68,7 @@ class _addsheetState extends State<addsheet> {
                 setState(() {});
               }
             },
-          ),          SizedBox(height: 70),
+          ),          SizedBox(height: 100),
 
         ],
       ),
