@@ -57,7 +57,9 @@ class _addnoteformState extends State<addnoteform> {
           ),
           Spacer(flex: 5),
           CustomButtonwidget(
+
             text: 'add',
+            isLoading: false,
             onTap: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();

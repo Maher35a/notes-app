@@ -1,13 +1,18 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../cubits/addnote_cubit.dart';
+import '../../models/note-model.dart';
 import 'BottomSheetwidget.dart';
 import 'CustomButton.dart';
 import 'Customtextfildwidget.dart';
+import '';
 class addsheet extends StatefulWidget {
   const addsheet({super.key});
+
   @override
   State<addsheet> createState() => addsheetState();
 }
+
 class addsheetState extends State<addsheet> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
@@ -39,15 +44,27 @@ class addsheetState extends State<addsheet> {
           ),
           SizedBox(height: 20),
 
-          CustomButtonwidget(
-            text: 'add',
-            onTap: () {
-              if (formKey.currentState!.validate()) {
-                formKey.currentState!.save();
-              } else {
-                autovalidateMode = AutovalidateMode.always;
-                setState(() {});
-              }
+          BlocBuilder<AddnoteCubit, AddnoteState>(
+            builder: (context, state) {
+              return CustomButtonwidget(
+                text: 'add',
+                isLoading: state is AddnoteLoading ? true : false,
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    var notemodel = NoteModel(
+                      title: title!,
+                      subtitle: subtitle!,
+                      date: DateTime.now().toString(),
+                      color: Colors.red.value,
+                    );
+                    BlocProvider.of<AddnoteCubit>(context).addnote(notemodel);
+                  } else {
+                    autovalidateMode = AutovalidateMode.always;
+                    setState(() {});
+                  }
+                },
+              );
             },
           ),
           SizedBox(height: 100),
